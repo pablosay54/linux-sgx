@@ -282,7 +282,23 @@ int EnclaveCreatorHW::emodpr(uint64_t addr, uint64_t size, uint64_t flag)
 
     return SGX_SUCCESS;
 }
- 
+
+int EnclaveCreatorHW::eaug(uint64_t addr, uint64_t size)
+{
+    sgx_range range;
+    range.start_addr = (unsigned long)addr;
+    range.nr_pages = (unsigned int)(size/SE_PAGE_SIZE);
+
+    int ret = ioctl(m_hdevice, SGX_IOC_ENCLAVE_EAUG, &range);
+    if (ret)
+    {
+        SE_TRACE(SE_TRACE_ERROR, "SGX_IOC_ENCLAVE_EAUG failed %d\n", errno);
+        return error_driver2urts(ret);
+    }
+
+    return SGX_SUCCESS;
+}
+
 int EnclaveCreatorHW::mktcs(uint64_t tcs_addr)
 {
     sgx_range params;

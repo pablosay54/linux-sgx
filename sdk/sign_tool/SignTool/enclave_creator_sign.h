@@ -58,6 +58,7 @@ public:
     bool is_in_kernel_driver();
     int get_enclave_info(uint8_t *hash, int size, uint64_t *quota);
     int emodpr(uint64_t addr, uint64_t size, uint64_t flag);
+    int eaug(uint64_t addr, uint64_t size);
     int mktcs(uint64_t tcs_addr);
     int trim_range(uint64_t fromaddr, uint64_t toaddr);
     int trim_accept(uint64_t addr);

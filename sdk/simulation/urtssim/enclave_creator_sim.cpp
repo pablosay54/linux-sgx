@@ -280,6 +280,14 @@ int EnclaveCreatorSim::emodpr(uint64_t addr, uint64_t size, uint64_t flag)
     return SGX_SUCCESS;
 }
 
+int EnclaveCreatorSim::eaug(uint64_t addr, uint64_t size)
+{
+    UNUSED(addr);
+    UNUSED(size);
+
+    return SGX_SUCCESS;
+}
+
 int EnclaveCreatorSim::mktcs(uint64_t tcs_addr)
 {
     UNUSED(tcs_addr);

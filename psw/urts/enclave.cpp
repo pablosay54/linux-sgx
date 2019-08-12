@@ -388,6 +388,8 @@ int CEnclave::ocall(const unsigned int proc, const sgx_ocall_table_t *ocall_tabl
 			error = ocall_trim_accept(ms);
 		else if ((int)proc == EDMM_MODPR)
 			error = ocall_emodpr(ms);
+		else if ((int)proc == EDMM_AUG)
+			error = ocall_eaug(ms);
 		else if (proc == SL_WAKE_WORKERS)
 			error = sl_ocall_wake_workers(ms);
     }

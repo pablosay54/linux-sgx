@@ -76,3 +76,29 @@ sgx_status_t SGXAPI change_permissions_ocall(size_t addr, size_t size, uint64_t 
     return status;
 #endif
 }
+
+typedef struct ms_allocate_pages_ocall_t {
+    size_t ms_addr;
+    size_t ms_size;
+} ms_allocate_pages_ocall_t;
+
+sgx_status_t SGXAPI allocate_pages_ocall(size_t addr, size_t size)
+{
+#ifdef SE_SIM
+    (void)addr;
+    (void)size;
+    return SGX_SUCCESS;
+#else
+    sgx_status_t status = SGX_SUCCESS;
+
+    ms_allocate_pages_ocall_t* ms;
+    OCALLOC(ms, ms_allocate_pages_ocall_t*, sizeof(*ms));
+
+    ms->ms_addr = addr;
+    ms->ms_size = size;
+    status = sgx_ocall(EDMM_AUG, ms);
+
+    sgx_ocfree();
+    return status;
+#endif
+}

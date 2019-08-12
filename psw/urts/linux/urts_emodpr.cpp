@@ -33,6 +33,8 @@
 #include "enclave_creator.h"
 #include <sys/mman.h>
 
+/* Very bad practice */
+/* Exactly the same as change_permissions_ocall_t */
 typedef struct ms_emodpr_ocall_t {
     size_t ms_addr;
     size_t ms_size;
@@ -61,6 +63,37 @@ sgx_status_t ocall_emodpr(void* pms)
     }
 
     ret = mprotect((void*)ms->ms_addr, ms->ms_size, (int)ms->ms_epcm_perms);
+    if(ret != 0)
+    {
+        return SGX_ERROR_UNEXPECTED;
+    }
+
+    return SGX_SUCCESS;
+}
+
+/* Exactly the same as allocate_pages_ocall_t */
+typedef struct ms_allocate_pages_ocall_t {
+    size_t ms_addr;
+    size_t ms_size;
+} ms_allocate_pages_ocall_t;
+
+sgx_status_t ocall_eaug(void* pms)
+{
+    int ret = 0;
+    ms_allocate_pages_ocall_t*ms = SGX_CAST(ms_allocate_pages_ocall_t*, pms);
+
+    EnclaveCreator *enclave_creator = get_enclave_creator();
+    if(NULL == enclave_creator)
+    {
+        return SGX_ERROR_UNEXPECTED;
+    }
+    ret = enclave_creator->eaug(ms->ms_addr, ms->ms_size);
+    if(0 != ret)
+    {
+        return (sgx_status_t)ret;
+    }
+
+    ret = mprotect((void*)ms->ms_addr, ms->ms_size, (int)PROT_READ|PROT_WRITE);
     if(ret != 0)
     {
         return SGX_ERROR_UNEXPECTED;

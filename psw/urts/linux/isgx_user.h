@@ -85,6 +85,8 @@
 	_IOW(SGX_MAGIC, 0x0c, struct sgx_range)
 #define SGX_IOC_ENCLAVE_PAGE_REMOVE \
 	_IOW(SGX_MAGIC, 0x0d, unsigned long)
+#define SGX_IOC_ENCLAVE_EAUG \
+	_IOW(SGX_MAGIC, 0x0e, struct sgx_range)
 
 /* SGX leaf instruction return values */
 #define SGX_INVALID_SIG_STRUCT		1

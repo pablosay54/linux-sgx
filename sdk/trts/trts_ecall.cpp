@@ -506,3 +506,33 @@ extern "C" sgx_status_t trts_mprotect(size_t start, size_t size, uint64_t perms)
 
     return SGX_SUCCESS;
 }
+
+extern "C" sgx_status_t trts_mmap(size_t start, size_t size)
+{
+    int rc = -1;
+    size_t page;
+    sgx_status_t ret = SGX_SUCCESS;
+    SE_DECLSPEC_ALIGN(sizeof(sec_info_t)) sec_info_t si;
+
+    //Error return if start or size is not page-aligned or size is zero.
+    if (!IS_PAGE_ALIGNED(start) || (size == 0) || !IS_PAGE_ALIGNED(size))
+        return SGX_ERROR_INVALID_PARAMETER;
+    if (g_sdk_version == SDK_VERSION_2_0)
+    {
+        ret = allocate_pages_ocall(start, size);
+        if (ret != SGX_SUCCESS)
+            return ret;
+    }
+
+    si.flags = SI_FLAG_R|SI_FLAG_W|SI_FLAG_REG|SI_FLAG_PR;
+    memset(&si.reserved, 0, sizeof(si.reserved));
+
+    for(page = start; page < start + size; page += SE_PAGE_SIZE)
+    {
+        rc = do_eaccept(&si, page);
+        if(rc != 0)
+            return (sgx_status_t)rc;
+    }
+
+    return SGX_SUCCESS;
+}
