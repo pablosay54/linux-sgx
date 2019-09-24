@@ -102,3 +102,29 @@ sgx_status_t SGXAPI allocate_pages_ocall(size_t addr, size_t size)
     return status;
 #endif
 }
+
+typedef struct ms_free_pages_ocall_t {
+    size_t ms_addr;
+    size_t ms_size;
+} ms_free_pages_ocall_t;
+
+sgx_status_t SGXAPI free_pages_ocall(size_t addr, size_t size)
+{
+#ifdef SE_SIM
+    (void)addr;
+    (void)size;
+    return SGX_SUCCESS;
+#else
+    sgx_status_t status = SGX_SUCCESS;
+
+    ms_free_pages_ocall_t* ms;
+    OCALLOC(ms, ms_free_pages_ocall_t*, sizeof(*ms));
+
+    ms->ms_addr = addr;
+    ms->ms_size = size;
+    status = sgx_ocall(EDMM_REMOVE, ms);
+
+    sgx_ocfree();
+    return status;
+#endif
+}

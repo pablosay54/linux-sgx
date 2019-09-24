@@ -101,3 +101,28 @@ sgx_status_t ocall_eaug(void* pms)
 
     return SGX_SUCCESS;
 }
+
+/* Exactly the same as allocate_pages_ocall_t */
+typedef struct ms_free_pages_ocall_t {
+    size_t ms_addr;
+    size_t ms_size;
+} ms_free_pages_ocall_t;
+
+sgx_status_t ocall_eremove(void* pms)
+{
+    int ret = 0;
+    ms_free_pages_ocall_t*ms = SGX_CAST(ms_free_pages_ocall_t*, pms);
+
+    EnclaveCreator *enclave_creator = get_enclave_creator();
+    if(NULL == enclave_creator)
+    {
+        return SGX_ERROR_UNEXPECTED;
+    }
+    ret = enclave_creator->remove_range(ms->ms_addr, ms->ms_size);
+    if(0 != ret)
+    {
+        return (sgx_status_t)ret;
+    }
+
+    return SGX_SUCCESS;
+}

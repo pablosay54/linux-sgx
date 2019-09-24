@@ -536,3 +536,20 @@ extern "C" sgx_status_t trts_mmap(size_t start, size_t size)
 
     return SGX_SUCCESS;
 }
+
+extern "C" sgx_status_t trts_munmap(size_t start, size_t size)
+{
+    sgx_status_t ret = SGX_SUCCESS;
+
+    //Error return if start or size is not page-aligned or size is zero.
+    if (!IS_PAGE_ALIGNED(start) || (size == 0) || !IS_PAGE_ALIGNED(size))
+        return SGX_ERROR_INVALID_PARAMETER;
+    if (g_sdk_version == SDK_VERSION_2_0)
+    {
+        ret = free_pages_ocall(start, size);
+        if (ret != SGX_SUCCESS)
+            return ret;
+    }
+
+    return SGX_SUCCESS;
+}
