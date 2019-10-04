@@ -524,7 +524,7 @@ extern "C" sgx_status_t trts_mmap(size_t start, size_t size)
             return ret;
     }
 
-    si.flags = SI_FLAG_R|SI_FLAG_W|SI_FLAG_REG|SI_FLAG_PR;
+    si.flags = SI_FLAGS_RW | SI_FLAG_PENDING;
     memset(&si.reserved, 0, sizeof(si.reserved));
 
     for(page = start; page < start + size; page += SE_PAGE_SIZE)

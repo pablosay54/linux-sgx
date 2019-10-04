@@ -118,7 +118,7 @@ sgx_status_t ocall_eremove(void* pms)
     {
         return SGX_ERROR_UNEXPECTED;
     }
-    ret = enclave_creator->remove_range(ms->ms_addr, ms->ms_size);
+    ret = enclave_creator->remove_range(ms->ms_addr, ms->ms_size >> SE_PAGE_SHIFT);
     if(0 != ret)
     {
         return (sgx_status_t)ret;

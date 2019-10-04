@@ -285,11 +285,12 @@ int EnclaveCreatorHW::emodpr(uint64_t addr, uint64_t size, uint64_t flag)
 
 int EnclaveCreatorHW::eaug(uint64_t addr, uint64_t size)
 {
-    sgx_range range;
-    range.start_addr = (unsigned long)addr;
-    range.nr_pages = (unsigned int)(size/SE_PAGE_SIZE);
+    sgx_range params;
+    memset(&params, 0, sizeof(sgx_range));
+    params.start_addr = (unsigned long)addr;
+    params.nr_pages = (unsigned int)(size/SE_PAGE_SIZE);
 
-    int ret = ioctl(m_hdevice, SGX_IOC_ENCLAVE_EAUG, &range);
+    int ret = ioctl(m_hdevice, SGX_IOC_ENCLAVE_EAUG, &params);
     if (ret)
     {
         SE_TRACE(SE_TRACE_ERROR, "SGX_IOC_ENCLAVE_EAUG failed %d\n", errno);
