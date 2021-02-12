@@ -77,6 +77,31 @@ sgx_status_t SGXAPI change_permissions_ocall(size_t addr, size_t size, uint64_t 
 #endif
 }
 
+sgx_status_t SGXAPI NesTEE_change_permissions_ocall(size_t addr, size_t size, uint64_t epcm_perms)
+{
+#ifdef SE_SIM
+    (void)addr;
+    (void)size;
+    (void)epcm_perms;
+    return SGX_SUCCESS;
+#else
+    sgx_status_t status = SGX_SUCCESS;
+
+    ms_change_permissions_ocall_t* ms;
+    OCALLOC(ms, ms_change_permissions_ocall_t*, sizeof(*ms));
+
+    ms->ms_addr = addr;
+    ms->ms_size = size;
+    ms->ms_epcm_perms = epcm_perms;
+    status = sgx_ocall(EDMM_MODPR, ms);
+
+
+    sgx_ocfree();
+    return status;
+#endif
+}
+
+
 typedef struct ms_allocate_pages_ocall_t {
     size_t ms_addr;
     size_t ms_size;
