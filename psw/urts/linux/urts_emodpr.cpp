@@ -71,6 +71,16 @@ sgx_status_t ocall_emodpr(void* pms)
     return SGX_SUCCESS;
 }
 
+/* TODO */
+sgx_status_t ocall_NesTEE_MODPR(void* pms)
+{
+    if (pms == NULL)
+    {
+    	return SGX_ERROR_UNEXPECTED;
+    }
+    return SGX_SUCCESS;
+}
+
 /* Exactly the same as allocate_pages_ocall_t */
 typedef struct ms_allocate_pages_ocall_t {
     size_t ms_addr;

@@ -242,9 +242,9 @@ DECLARE_LOCAL_FUNC NesTEE_Gateway
 
     /* Check ENCLU parameters*/
     cmp     $0x6, %rax
-    jmp     abort
+    /* jmp     abort */
     cmp     %rdi, %rcx
-    jmp     abort
+    /* jmp     abort */
 
     /* Set up secure stack */
     mov     %rsp, %rbx
@@ -269,29 +269,15 @@ DECLARE_LOCAL_FUNC NesTEE_Gateway
 
     /* Check ENCLU parameters*/
     cmp    $0xe, %rax
-    jmp     abort
+    /* jmp    abort */
     cmp    %r9, %rbx
-    jmp     abort
+    /* jmp    abort */
     cmp    %rdi, %rcx
 
     /* restore user stack */
     pop    %rbx
     mov    %rbx, %rsp
     ret 
-
-DECLARE_GLOBAL_FUNC do_eaccept
-    SE_PROLOG
-    mov     $SE_EACCEPT, %eax
-    ENCLU
-    cmp  $SGX_SUCCESS, %eax 
-    jnz	 abort 
-    SE_EPILOG
-
-DECLARE_GLOBAL_FUNC do_emodpe
-    SE_PROLOG
-    mov     $SE_EMODPE, %eax 
-    ENCLU
-    SE_EPILOG
 
 /* 
  * -------------------------------------------------------------------------

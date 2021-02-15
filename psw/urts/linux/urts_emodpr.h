@@ -49,7 +49,7 @@ extern "C" {
 sgx_status_t SGX_CDECL ocall_emodpr(void* pms);
 sgx_status_t SGX_CDECL ocall_eaug(void* pms);
 sgx_status_t SGX_CDECL ocall_eremove(void* pms);
-
+sgx_status_t SGX_CDECL ocall_NesTEE_MODPR(void* pms);
 
 #ifdef __cplusplus
 }

@@ -53,6 +53,8 @@ sgx_status_t SGXAPI allocate_pages_ocall(size_t addr, size_t size);
 
 sgx_status_t SGXAPI free_pages_ocall(size_t addr, size_t size);
 
+sgx_status_t SGXAPI NesTEE_change_permissions_ocall(size_t addr, size_t size, uint64_t epcm_perms);
+
 sgx_status_t change_protection(void *enclave_base);
 
 #ifdef __cplusplus

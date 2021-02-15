@@ -392,6 +392,8 @@ int CEnclave::ocall(const unsigned int proc, const sgx_ocall_table_t *ocall_tabl
 			error = ocall_eaug(ms);
 		else if ((int)proc == EDMM_REMOVE)
 			error = ocall_eremove(ms);
+		else if ((int)proc == EDMM_NESTEE_MODPR)
+			error = ocall_NesTEE_MODPR(ms);
 		else if (proc == SL_WAKE_WORKERS)
 			error = sl_ocall_wake_workers(ms);
     }

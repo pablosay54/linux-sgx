@@ -509,8 +509,8 @@ extern "C" sgx_status_t trts_mprotect(size_t start, size_t size, uint64_t perms)
 
 extern "C" sgx_status_t NesTEE_trts_mprotect(size_t start, size_t size, uint64_t perms)
 {
-    int rc = -1;
-    size_t page;
+    // int rc = -1;
+    //size_t page;
     sgx_status_t ret = SGX_SUCCESS;
     SE_DECLSPEC_ALIGN(sizeof(sec_info_t)) sec_info_t si;
 
