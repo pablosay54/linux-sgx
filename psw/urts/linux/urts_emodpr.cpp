@@ -71,13 +71,24 @@ sgx_status_t ocall_emodpr(void* pms)
     return SGX_SUCCESS;
 }
 
-/* TODO */
 sgx_status_t ocall_NesTEE_MODPR(void* pms)
 {
-    if (pms == NULL)
+    int ret = 0;
+    ms_trim_emodpr_ocall_t* ms = SGX_CAST(ms_trim_emodpr_ocall_t*, pms);
+
+    if(ms->ms_epcm_perms < (SI_FLAG_R|SI_FLAG_W|SI_FLAG_X))
     {
-    	return SGX_ERROR_UNEXPECTED;
-    }
+       EnclaveCreator *enclave_creator = get_enclave_creator();
+       if(NULL == enclave_creator)
+       {
+           return SGX_ERROR_UNEXPECTED;
+       }
+       ret = enclave_creator->emodpr(ms->ms_addr, ms->ms_size, ms->ms_epcm_perms);
+       if(0 != ret)
+       {
+          return (sgx_status_t)ret;
+       }
+    }  
     return SGX_SUCCESS;
 }
 

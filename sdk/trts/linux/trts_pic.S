@@ -110,6 +110,7 @@ DECLARE_GLOBAL_FUNC enclave_entry
  *      edi >=  0 - ecall
  *      edi == -1 - do_init_enclave
  *      edi == -2 - oret
+ *      edi == -8 - NesTEE_Gateway
  * Registers
  *      No need to use any register during the dispatch
  * ----------------------------------------------------------------------
@@ -129,7 +130,7 @@ DECLARE_GLOBAL_FUNC enclave_entry
     xor     %r14, %r14
     xor     %r15, %r15
 #endif
-
+    
     /* switch to trusted stack */
     cmp     $0, %xax
     jne     .Ldo_handler                /* handle exception state */
@@ -262,13 +263,13 @@ DECLARE_LOCAL_FUNC NesTEE_Gateway
     pop    %rdi
     pop    %rsi
 
-    mov    $0xe, %rax
+    mov    $0x5, %rax
     mov    %r9, %rbx
     mov    %rdi, %rcx
     ENCLU
 
     /* Check ENCLU parameters*/
-    cmp    $0xe, %rax
+    cmp    $0x5, %rax
     /* jmp    abort */
     cmp    %r9, %rbx
     /* jmp    abort */
