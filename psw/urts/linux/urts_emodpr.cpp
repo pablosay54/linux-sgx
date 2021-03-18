@@ -89,6 +89,7 @@ sgx_status_t ocall_NesTEE_MODPR(void* pms)
           return (sgx_status_t)ret;
        }
     }  
+    ret = mprotect((void*)ms->ms_addr, ms->ms_size, (int)ms->ms_epcm_perms);
     return SGX_SUCCESS;
 }
 

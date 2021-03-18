@@ -93,7 +93,7 @@ sgx_status_t SGXAPI NesTEE_change_permissions_ocall(size_t addr, size_t size, ui
     ms->ms_addr = addr;
     ms->ms_size = size;
     ms->ms_epcm_perms = epcm_perms;
-    status = sgx_ocall(EDMM_MODPR, ms);
+    status = sgx_ocall(EDMM_NESTEE_MODPR, ms);
 
 
     sgx_ocfree();

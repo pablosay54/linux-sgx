@@ -218,68 +218,6 @@ DECLARE_GLOBAL_FUNC enclave_entry
     ud2
     
     .cfi_endproc
-
-
-/* 
- * ---------------------------------------------------------------------
- * NesTEE_Gateway(void);
- *  Function: 
- *      Entry and Exit Gate code for NesTEE
- *  Parameters:
- *      page
- *      stack
- *      func_addr
- *      secinfo_RWX
- *      secinfo_R
- * ---------------------------------------------------------------------
- */
-DECLARE_LOCAL_FUNC NesTEE_Gateway
-
-    /* Unprotect NesTEE Page */
-    mov     $0x6, %rax 
-    mov     %rcx, %rbx
-    mov     %rdi, %rcx
-    ENCLU
-
-    /* Check ENCLU parameters*/
-    cmp     $0x6, %rax
-    /* jmp     abort */
-    cmp     %rdi, %rcx
-    /* jmp     abort */
-
-    /* Set up secure stack */
-    mov     %rsp, %rbx
-    mov     %rdi, %rsp
-    push    %rbx
-
-    /* Go into NesTEE libOS with start & size as params */
-    push    %rsi
-    push    %rdi
-    jmp     %rdx
-    ud2     /* "Never return here" from NesTEE*/
-    
-    .LNesTEE_Exit:     
-    /* protect the NesTEE page using saved registers */
-    pop    %rdi
-    pop    %rsi
-
-    mov    $0x5, %rax
-    mov    %r9, %rbx
-    mov    %rdi, %rcx
-    ENCLU
-
-    /* Check ENCLU parameters*/
-    cmp    $0x5, %rax
-    /* jmp    abort */
-    cmp    %r9, %rbx
-    /* jmp    abort */
-    cmp    %rdi, %rcx
-
-    /* restore user stack */
-    pop    %rbx
-    mov    %rbx, %rsp
-    ret 
-
 /* 
  * -------------------------------------------------------------------------
  *  sgx_status_t do_ocall(unsigned int index, void *ms);
